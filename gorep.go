@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-	dirname := os.Args[1]
-	pattern := os.Args[2]
+	pattern := os.Args[1]
+	dirname := os.Args[2]
 	fileinfos, err := ioutil.ReadDir(dirname)
 	if err != nil {
 		log.Fatal(err)
@@ -19,8 +19,7 @@ func main() {
 	}
 
 	for _, file := range fileinfos {
-		if !file.IsDir() && strings.HasSuffix(file.Name(), ".go") {
-			//
+		if !file.IsDir() {
 			f, err := os.Open(file.Name())
 			if err != nil {
 				log.Fatal(err)
@@ -32,7 +31,7 @@ func main() {
 			line := 1
 			for scanner.Scan() {
 				if strings.Contains(scanner.Text(), pattern) {
-					fmt.Printf("L%d: %s\n", line, scanner.Text())
+					fmt.Printf("%s:%d: %s\n", file.Name(), line, scanner.Text())
 				}
 				line++
 			}
